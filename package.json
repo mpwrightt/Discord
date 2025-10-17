@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/bot/index.ts",
+    "prebuild": "rm -f convex/*.js convex/*.d.ts convex/*.js.map convex/*.d.ts.map",
     "build": "tsc",
     "start": "node dist/bot/index.js",
     "convex:dev": "convex dev",
