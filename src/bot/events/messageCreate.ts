@@ -10,9 +10,24 @@ const apiKey = process.env.GOOGLE_AI_API_KEY;
 const geminiClient = apiKey ? new GoogleGeminiClient(apiKey, geminiModel) : null;
 
 export async function execute(message: Message) {
-  if (message.author.bot || message.guild || message.channel.type !== ChannelType.DM) {
+  console.log(`[MessageCreate] Received message from ${message.author.tag} in ${message.channel.type}`);
+  
+  if (message.author.bot) {
+    console.log('[MessageCreate] Ignoring bot message');
     return;
   }
+  
+  if (message.guild) {
+    console.log('[MessageCreate] Ignoring guild message');
+    return;
+  }
+  
+  if (message.channel.type !== ChannelType.DM) {
+    console.log(`[MessageCreate] Ignoring non-DM channel: ${message.channel.type}`);
+    return;
+  }
+
+  console.log('[MessageCreate] Processing DM message:', message.content);
 
   if (!geminiClient) {
     console.warn('DM chat requested but GOOGLE_AI_API_KEY is not configured.');
