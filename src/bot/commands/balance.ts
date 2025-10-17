@@ -1,6 +1,7 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder } from 'discord.js';
 import { ConvexHttpClient } from 'convex/browser';
 import { api } from '../../../convex/_generated/api.js';
+import { getOrCreateUserOrThrow } from '../../lib/convex-helpers.js';
 import { COLORS, formatNumber } from '../../lib/utils.js';
 import { createErrorEmbed } from '../../lib/utils.js';
 
@@ -18,13 +19,14 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(interaction: ChatInputCommandInteraction) {
   const targetUser = interaction.options.getUser('user') || interaction.user;
+  const targetMember = interaction.guild?.members.cache.get(targetUser.id);
   
   await interaction.deferReply();
 
   try {
     // Get or create user
-    const user = await convex.mutation(api.users.getOrCreateUser, {
-      discordId: targetUser.id,
+    const user = await getOrCreateUserOrThrow(convex, {
+      id: targetUser.id,
       username: targetUser.username,
     });
 
@@ -33,7 +35,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const embed = new EmbedBuilder()
       .setTitle(`💰 ${targetUser.username}'s Balance`)
       .setColor(COLORS.CANNABIS)
-      .setThumbnail(targetUser.displayAvatarURL())
+      .setThumbnail(targetMember?.displayAvatarURL() ?? targetUser.displayAvatarURL())
       .addFields(
         { name: '💚 Buds', value: `**${formatNumber(user.buds)}** Buds`, inline: true },
         { name: '📊 Level', value: `**${user.level}**`, inline: true },

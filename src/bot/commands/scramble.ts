@@ -4,6 +4,7 @@ import { api } from '../../../convex/_generated/api.js';
 import { STRAINS } from '../../lib/strains.js';
 import { COLORS } from '../../lib/utils.js';
 import { createSuccessEmbed, createErrorEmbed } from '../../lib/utils.js';
+import { getOrCreateUserOrThrow } from '../../lib/convex-helpers.js';
 
 const convex = new ConvexHttpClient(process.env.CONVEX_URL!);
 
@@ -25,8 +26,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
   try {
     // Get user
-    await convex.mutation(api.users.getOrCreateUser, {
-      discordId: interaction.user.id,
+    await getOrCreateUserOrThrow(convex, {
+      id: interaction.user.id,
       username: interaction.user.username,
     });
 
@@ -53,7 +54,13 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const filter = (m: any) => m.author.id === interaction.user.id;
     
     try {
-      const collected = await interaction.channel?.awaitMessages({ 
+      const channel = interaction.channel;
+      if (!channel || !('awaitMessages' in channel)) {
+        await interaction.followUp({ embeds: [createErrorEmbed('Channel unavailable for game responses.')] });
+        return;
+      }
+
+      const collected = await channel.awaitMessages({ 
         filter, 
         max: 1, 
         time: 30000,

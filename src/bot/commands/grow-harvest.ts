@@ -3,6 +3,7 @@ import { ConvexHttpClient } from 'convex/browser';
 import { api } from '../../../convex/_generated/api.js';
 import { getStrainByName, calculateYield } from '../../lib/strains.js';
 import { createSuccessEmbed, createErrorEmbed, getRarityEmoji } from '../../lib/utils.js';
+import { getOrCreateUserOrThrow } from '../../lib/convex-helpers.js';
 
 const convex = new ConvexHttpClient(process.env.CONVEX_URL!);
 
@@ -15,8 +16,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
   try {
     // Get user to check equipment
-    const user = await convex.mutation(api.users.getOrCreateUser, {
-      discordId: interaction.user.id,
+    const user = await getOrCreateUserOrThrow(convex, {
+      id: interaction.user.id,
       username: interaction.user.username,
     });
 

@@ -25,6 +25,7 @@ const client = new Client({
 }) as ExtendedClient;
 
 client.commands = new Collection();
+client.dmConversations = new Map();
 
 // Load commands
 async function loadCommands() {

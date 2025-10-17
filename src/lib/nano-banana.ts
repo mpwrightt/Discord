@@ -102,7 +102,7 @@ export class NanaBananaClient {
 
   async blendImages(imageBuffers: Buffer[], blendPrompt: string): Promise<Buffer> {
     try {
-      const parts = imageBuffers.map(buffer => ({
+      const parts: Array<{ inlineData: { mimeType: string; data: string } } | { text: string }> = imageBuffers.map(buffer => ({
         inlineData: {
           mimeType: 'image/jpeg',
           data: buffer.toString('base64')

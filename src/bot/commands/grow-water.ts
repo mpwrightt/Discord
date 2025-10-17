@@ -26,7 +26,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     }
 
     // Water all plants
-    const results = [];
+    const results: Array<{ plant: string; health?: number; wasLate?: boolean; error?: string }> = [];
     for (const plant of plants) {
       try {
         const result = await convex.mutation(api.grows.waterPlant, {

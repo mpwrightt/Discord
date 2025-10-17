@@ -6,8 +6,14 @@ export interface BotCommand {
   autocomplete?: (interaction: AutocompleteInteraction) => Promise<void>;
 }
 
+export interface DMChatMessage {
+  role: 'user' | 'model';
+  parts: string;
+}
+
 export interface ExtendedClient extends Client {
   commands: Collection<string, BotCommand>;
+  dmConversations: Map<string, DMChatMessage[]>;
 }
 
 export interface AIPersonality {

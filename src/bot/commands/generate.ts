@@ -3,6 +3,7 @@ import { ConvexHttpClient } from 'convex/browser';
 import { api } from '../../../convex/_generated/api.js';
 import { generateImage } from '../../lib/nano-banana.js';
 import { createSuccessEmbed, createErrorEmbed } from '../../lib/utils.js';
+import { getOrCreateUserOrThrow } from '../../lib/convex-helpers.js';
 
 const convex = new ConvexHttpClient(process.env.CONVEX_URL!);
 
@@ -27,8 +28,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const prompt = interaction.options.getString('prompt', true);
 
     // Get user
-    const user = await convex.mutation(api.users.getOrCreateUser, {
-      discordId: interaction.user.id,
+    const user = await getOrCreateUserOrThrow(convex, {
+      id: interaction.user.id,
       username: interaction.user.username,
     });
 
