@@ -1,0 +1,37 @@
+{
+  "name": "cannabis-community-bot",
+  "version": "1.0.0",
+  "description": "AI-powered Discord bot for cannabis communities",
+  "main": "dist/bot/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/bot/index.ts",
+    "build": "tsc",
+    "start": "node dist/bot/index.js",
+    "convex:dev": "convex dev",
+    "convex:deploy": "convex deploy",
+    "db:init": "tsx scripts/init-database.ts",
+    "db:stats": "tsx scripts/init-database.ts stats",
+    "db:strains": "tsx scripts/list-strains.ts",
+    "register": "tsx scripts/register-commands.ts",
+    "commands:list": "tsx scripts/list-discord-commands.ts",
+    "test:image": "tsx scripts/test-image-gen.ts"
+  },
+  "keywords": ["discord", "bot", "cannabis", "ai", "openrouter"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^14.14.1",
+    "convex": "^1.16.2",
+    "@google/generative-ai": "^0.21.0",
+    "@google-cloud/text-to-speech": "^5.4.0",
+    "@google-cloud/speech": "^6.7.0",
+    "dotenv": "^16.4.5",
+    "axios": "^1.7.7"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.19",
+    "typescript": "^5.3.3",
+    "tsx": "^4.7.1"
+  }
+}
